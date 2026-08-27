@@ -1,0 +1,60 @@
+<div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 font-sans text-slate-800">
+      <!-- Top Header -->
+      <header class="p-5 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight text-slate-900">Bayarin</h1>
+          <button class="flex items-center gap-1 text-xs text-slate-500 font-medium mt-0.5">
+            September 2026
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </div>
+        <button class="p-2.5 rounded-full border border-slate-200 bg-white shadow-sm relative text-slate-600 hover:bg-slate-50">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        </button>
+      </header>
+
+      <main class="px-5 space-y-6">
+
+        <!-- Section: Overview -->
+        <app-overview/>
+
+        <!-- Section: Spending Overview -->
+        <app-spending-overview/>
+
+        <!-- Section: Upcoming Bills -->
+        <app-upcoming-bills/>
+
+        <!-- Section: Recent Bills -->
+        <app-recent-bills/>
+        
+      </main>
+
+      <!-- Bottom Tab Navigation -->
+      <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-slate-100 px-6 py-2 flex justify-between items-center z-20">
+        <button class="flex flex-col items-center gap-1 text-violet-600">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          <span class="text-[10px] font-bold">Dashboard</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span class="text-[10px] font-medium">Bills</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span class="text-[10px] font-medium">Calendar</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span class="text-[10px] font-medium">Reports</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <span class="text-[10px] font-medium">More</span>
+        </button>
+      </nav>
+
+    </div>

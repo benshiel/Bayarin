@@ -1,0 +1,26 @@
+<section>
+          <h2 class="text-base font-bold text-slate-900 mb-3">Overview</h2>
+          <div class="grid grid-cols-4 gap-2.5">
+            @for (card of overviewCards; track card.title) {
+              <div class="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between items-center text-center">
+                <div [class]="'w-8 h-8 rounded-xl flex items-center justify-center mb-2 ' + card.bgClass + ' ' + card.colorClass">
+                  <!-- Dynamic SVG Icons -->
+                  <ng-container [ngSwitch]="card.icon">
+                    <svg *ngSwitchCase="'file'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <svg *ngSwitchCase="'check'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <svg *ngSwitchCase="'clock'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg *ngSwitchCase="'alert'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                  </ng-container>
+                </div>
+                <span class="text-[11px] font-medium text-slate-500 mb-1">{{ card.title }}</span>
+                <span class="text-sm font-bold text-slate-900 mb-0.5">₱ {{ card.amount | number }}</span>
+                <span class="text-[10px] text-slate-400 mb-2">{{ card.subtext }}</span>
+                <!-- Mini Progress Bar -->
+                <div class="w-full bg-slate-100 rounded-full h-1">
+                  <div [class]="'h-1 rounded-full ' + card.barColor" style="width: 100%"></div>
+                </div>
+              </div>
+            }
+          </div>
+</section>
+

@@ -1,0 +1,34 @@
+        <section class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+          <div class="flex justify-between items-center mb-3">
+            <h2 class="text-base font-bold text-slate-900">Upcoming Bills</h2>
+            <a href="#" class="text-xs font-semibold text-violet-600 hover:text-violet-700">View All</a>
+          </div>
+
+          <div class="divide-y divide-slate-50">
+            @for (bill of upcomingBills; track bill.id) {
+              <div class="py-2.5 flex items-center justify-between first:pt-0 last:pb-0">
+                <div class="flex items-center gap-3">
+                  <div [class]="'w-10 h-10 rounded-xl flex items-center justify-center ' + bill.iconBg + ' ' + bill.iconColor">
+                    <ng-container [ngSwitch]="bill.icon">
+                      <svg *ngSwitchCase="'droplet'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+                      <svg *ngSwitchCase="'wifi'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+                      <svg *ngSwitchCase="'zap'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                      <svg *ngSwitchCase="'tv'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h18M3 16h18"/></svg>
+                      <svg *ngSwitchCase="'music'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424c-.18.295-.563.387-.857.207-2.35-1.434-5.308-1.758-8.793-.962-.335.077-.67-.133-.746-.467-.077-.334.132-.67.467-.746 3.816-.871 7.093-.496 9.722 1.112.294.18.386.563.207.856zm1.223-2.722c-.226.367-.706.482-1.072.257-2.687-1.652-6.785-2.131-9.965-1.166-.413.126-.849-.106-.975-.519-.125-.413.107-.849.519-.975 3.632-1.102 8.147-.568 11.236 1.332.366.226.481.706.257 1.071zm.105-2.835c-3.222-1.913-8.541-2.091-11.616-1.158-.496.15-1.023-.128-1.173-.624-.15-.496.128-1.024.624-1.173 3.536-1.073 9.404-.863 13.116 1.338.446.265.59.845.325 1.291-.265.446-.845.59-1.291.326z"/></svg>
+                    </ng-container>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-slate-800 leading-tight">{{ bill.title }}</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">{{ bill.date }}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-bold text-slate-900">₱ {{ bill.amount | number:'1.2-2' }}</p>
+                  <p class="text-[10px] font-semibold text-violet-500 bg-violet-50 px-2 py-0.5 rounded-full inline-block mt-0.5">
+                    {{ bill.dueText }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+</section>
