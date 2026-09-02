@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { BillItem } from '../interface/dashboard.interface';
 import { CommonModule } from '@angular/common';
+import { BillItem } from '../../../interface/dashboard.interface';
 
 @Component({
   imports: [CommonModule],
@@ -20,7 +20,9 @@ export class UpcomingBillsComponent {
         dueText: 'Due in 3 days',
         icon: 'droplet',
         iconBg: 'bg-sky-50',
-        iconColor: 'text-sky-500'
+        iconColor: 'text-sky-500',
+        category: 'Utilities',
+        dueDate: 'May 20, 2025'
       },
       {
         id: '2',
@@ -30,7 +32,9 @@ export class UpcomingBillsComponent {
         dueText: 'Due in 8 days',
         icon: 'wifi',
         iconBg: 'bg-indigo-50',
-        iconColor: 'text-indigo-500'
+        iconColor: 'text-indigo-500',
+        category: 'Utilities',
+        dueDate: 'May 20, 2025'
       },
       {
         id: '3',
@@ -40,7 +44,9 @@ export class UpcomingBillsComponent {
         dueText: 'Due in 11 days',
         icon: 'zap',
         iconBg: 'bg-amber-50',
-        iconColor: 'text-amber-500'
+        iconColor: 'text-amber-500',
+        category: 'Utilities',
+        dueDate: 'May 20, 2025'
       },
       {
         id: '4',
@@ -50,7 +56,9 @@ export class UpcomingBillsComponent {
         dueText: 'Due in 13 days',
         icon: 'tv',
         iconBg: 'bg-rose-50',
-        iconColor: 'text-rose-500'
+        iconColor: 'text-rose-500',
+        category: 'Utilities',
+        dueDate: 'May 20, 2025'
       },
       {
         id: '5',
@@ -60,8 +68,9 @@ export class UpcomingBillsComponent {
         dueText: 'Due in 13 days',
         icon: 'music',
         iconBg: 'bg-emerald-50',
-        iconColor: 'text-emerald-500'
+        iconColor: 'text-emerald-500',
+        category: 'Utilities',
+        dueDate: 'May 20, 2025'
       }
     ];
-  
 }

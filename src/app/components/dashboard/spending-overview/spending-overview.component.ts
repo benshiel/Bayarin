@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CategoryBreakdown } from '../interface/dashboard.interface';
+import { CategoryBreakdown } from '../../../interface/dashboard.interface';
 import { CommonModule } from '@angular/common';
 
 @Component({

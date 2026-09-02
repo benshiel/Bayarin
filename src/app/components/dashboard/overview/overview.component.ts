@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OverviewCard } from '../interface/dashboard.interface';
+import { OverviewCard } from '../../../interface/dashboard.interface';
 import { CommonModule } from '@angular/common';
 
 @Component({

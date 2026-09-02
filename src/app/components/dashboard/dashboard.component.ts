@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { BillItem } from './interface/dashboard.interface';
 import { OverviewComponent } from './overview/overview.component';
 import { SpendingOverviewComponent } from "./spending-overview/spending-overview.component";
 import { UpcomingBillsComponent } from './upcoming-bills/upcoming-bills.component';
@@ -14,5 +13,4 @@ import { RecentBillsComponent } from './recent-bills/recent-bills.component';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {
-
 }

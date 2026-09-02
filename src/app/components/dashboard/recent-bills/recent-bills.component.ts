@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { BillItem } from '../interface/dashboard.interface';
+import { BillItem } from '../../../interface/dashboard.interface';
 
 @Component({
   imports: [CommonModule],
@@ -19,7 +19,9 @@ export class RecentBillsComponent {
       status: 'Paid',
       icon: 'home',
       iconBg: 'bg-violet-50',
-      iconColor: 'text-violet-500'
+      iconColor: 'text-violet-500',
+      category: 'Utilities',
+      dueDate: 'May 5, 2025'
     }
   ];
 }

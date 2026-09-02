@@ -25,4 +25,6 @@ export interface BillItem {
   icon: string;
   iconBg: string;
   iconColor: string;
+  category: 'Utilities' | 'Entertainment' | 'Food' | 'Transportation' | 'Other';
+  dueDate: string;
 }
