@@ -1,194 +1,317 @@
 <div class="max-w-md mx-auto bg-slate-50 min-h-screen pb-24 font-sans text-slate-800 relative">
-      
-      <!-- Top Header -->
-      <header class="p-5 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
-        <div>
-          <h1 class="text-2xl font-bold tracking-tight text-slate-900">Bayarin</h1>
-          <!-- Month Selector -->
-          <div class="relative inline-block mt-0.5">
-            <input 
-              type="month" 
-              (change)="onChangeDate($event)"
-              [ngModel]="selectedMonth() | date:'yyyy-MM'" 
-              class="text-xs text-slate-500 font-medium bg-transparent border-none p-0 focus:ring-0 cursor-pointer"
-            />
-          </div>
-        </div>
+  <!-- Top Header -->
+  <header class="p-5 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Bayarin</h1>
+      <!-- Month Selector -->
+      <div class="relative inline-block mt-0.5">
+        <input
+          type="month"
+          (change)="onChangeDate($event)"
+          [ngModel]="selectedMonth() | date: 'yyyy-MM'"
+          class="text-xs text-slate-500 font-medium bg-transparent border-none p-0 focus:ring-0 cursor-pointer"
+        />
+      </div>
+    </div>
 
-        <!-- Add Bill CTA Button -->
-        <button 
-          (click)="isModalOpen.set(true)" 
-          class="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow-sm transition-all">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          Add Bill
+    <!-- Add Bill CTA Button -->
+    <button
+      (click)="isModalOpen.set(true)"
+      class="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow-sm transition-all"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Add Bill
+    </button>
+  </header>
+
+  <main class="px-5 space-y-4">
+    <!-- Summary Strip for Selected Month -->
+    <div
+      class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center"
+    >
+      <div>
+        @if (this.selectedCategory() === 'All') {
+          <p class="text-xs text-slate-400 font-medium">Total Pending for Month</p>
+        } @else {
+          <p class="text-xs text-slate-400 font-medium">
+            Total Pending for {{ selectedCategory() }}
+          </p>
+        }
+        <p class="text-lg font-bold text-slate-900">₱ {{ monthlyTotal() | number: '1.2-2' }}</p>
+      </div>
+      <div class="text-right">
+        <p class="text-xs text-slate-400 font-medium">Bills Count</p>
+        <p class="text-base font-bold text-violet-600">{{ totalBillItems() }} items</p>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+      @for (cat of ['All', 'Housing', 'Utilities', 'Transportation', 'Others']; track cat) {
+        <button
+          (click)="filterBills(cat)"
+          [class]="
+            'text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors ' +
+            (selectedCategory() === cat
+              ? 'bg-violet-600 text-white'
+              : 'bg-white text-slate-500 border border-slate-100')
+          "
+        >
+          {{ cat }}
         </button>
-      </header>
+      }
+    </div>
 
-      <main class="px-5 space-y-4">
-        
-        <!-- Summary Strip for Selected Month -->
-        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex justify-between items-center">
-          <div>
-            @if (this.selectedCategory() === 'All') {
-            <p class="text-xs text-slate-400 font-medium">Total Pending for Month</p>
-            }
-            @else {
-            <p class="text-xs text-slate-400 font-medium">Total Pending for {{ selectedCategory() }}</p>
-            }
-            <p class="text-lg font-bold text-slate-900">₱ {{ monthlyTotal() | number:'1.2-2' }}</p>
+    <!-- Bills List -->
+    <div class="space-y-2.5">
+      @for (bill of filteredBills(); track bill.id) {
+        <div
+          class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <!-- Icon mapping based on category -->
+            <div
+              [class]="
+                'w-10 h-10 rounded-xl flex items-center justify-center ' +
+                getCategoryStyles(bill.category).bg
+              "
+            >
+              <span [class]="getCategoryStyles(bill.category).text">
+                <ng-container [ngSwitch]="bill.category">
+                  <svg
+                    *ngSwitchCase="'Housing'"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                    />
+                  </svg>
+                  <svg
+                    *ngSwitchCase="'Utilities'"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  <svg
+                    *ngSwitchCase="'Transportation'"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 17a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4zM3 9h18M5 9l1-4h12l1 4M3 9v8a1 1 0 001 1h1m16-9v8a1 1 0 01-1 1h-1"
+                    />
+                  </svg>
+                  <svg
+                    *ngSwitchCase="' Subscriptions'"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 4v16M17 4v16M3 8h18M3 16h18"
+                    />
+                  </svg>
+                  <svg
+                    *ngSwitchDefault
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </ng-container>
+              </span>
+            </div>
+
+            <div>
+              <p
+                [class]="
+                  'text-sm font-bold leading-tight ' +
+                  (bill.status === 'Paid' ? 'line-through text-slate-400' : 'text-slate-800')
+                "
+              >
+                {{ bill.title }}
+              </p>
+              <p
+                [class]="
+                  'text-[11px] mt-0.5 ' +
+                  (bill.status === 'Paid' ? 'line-through text-slate-300' : 'text-slate-400')
+                "
+              >
+                Due {{ bill.dueDate }}
+              </p>
+            </div>
           </div>
-          <div class="text-right">
-            <p class="text-xs text-slate-400 font-medium">Bills Count</p>
-            <p class="text-base font-bold text-violet-600">{{ totalBillItems() }} items</p>
-          </div>
-        </div>
 
-        <!-- Category Filters -->
-        <div class="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-          @for (cat of ['All', 'Housing', 'Utilities', 'Transportation', 'Others']; track cat) {
-            <button 
-              (click)="filterBills(cat)"
-              [class]="'text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap transition-colors ' + 
-                (selectedCategory() === cat ? 'bg-violet-600 text-white' : 'bg-white text-slate-500 border border-slate-100')">
-              {{ cat }}
-            </button>
-          }
-        </div>
+          <div class="text-right flex items-center gap-3">
+            <div>
+              <p class="text-sm font-bold text-slate-900">₱ {{ bill.amount | number: '1.2-2' }}</p>
 
-        <!-- Bills List -->
-        <div class="space-y-2.5">
-          @for (bill of filteredBills(); track bill.id) {
-            <div class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
-              
-              <div class="flex items-center gap-3">
-                <!-- Icon mapping based on category -->
-                <div [class]="'w-10 h-10 rounded-xl flex items-center justify-center ' + getCategoryStyles(bill.category).bg">
-                  <span [class]="getCategoryStyles(bill.category).text">
-                    <ng-container [ngSwitch]="bill.category">
-                      <svg *ngSwitchCase="'Housing'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 00-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                      <svg *ngSwitchCase="'Utilities'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                      <svg *ngSwitchCase="'Transportation'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4zM3 9h18M5 9l1-4h12l1 4M3 9v8a1 1 0 001 1h1m16-9v8a1 1 0 01-1 1h-1"/></svg>
-                      <svg *ngSwitchCase="' Subscriptions'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h18M3 16h18"/></svg>
-                      <svg *ngSwitchDefault class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    </ng-container>
-                  </span>
-                </div>
-
-                <div>
-                  <p [class]="'text-sm font-bold leading-tight ' + (bill.status === 'Paid' ? 'line-through text-slate-400' : 'text-slate-800')">
-                    {{ bill.title }}
-                  </p>
-                  <p [class]="'text-[11px] mt-0.5 ' + (bill.status === 'Paid' ? 'line-through text-slate-300' : 'text-slate-400')">
-                    Due {{ bill.dueDate }}
-                  </p>
-                </div>
-              </div>
-
-              <div class="text-right flex items-center gap-3">
-                <div>
-                  <p class="text-sm font-bold text-slate-900">₱ {{ bill.amount | number:'1.2-2' }}</p>
-                  
-                  <!-- Status Toggle / Badge -->
-                  <button 
-                    (click)="toggleStatus(bill.id)" 
-                    [class]="'my-2 inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium border shadow-sm transition-all duration-150 active:scale-95 cursor-pointer ' + getStatusBadgeClass(bill.status)">
-
-                    <!-- Checkmark icon shown when Paid -->
-                    <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                    </svg>
-
-                    <span>{{ bill.status === 'Pending' ? 'Mark as Paid' : 'Paid' }}</span>
-                  </button>
-                </div>
-
-                <button (click)="deleteBill(bill.id)" class="text-slate-300 hover:text-rose-500 p-1">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
-              </div>
-
-            </div>
-          }
-          @empty {
-            <div class="text-center py-12 bg-white rounded-2xl border border-slate-100">
-              <p class="text-sm text-slate-400 font-medium">No bills found for this month.</p>
-            </div>
-          }
-        </div>
-      </main>
-
-      <!-- Add Bill Modal Sheet -->
-      @if (isModalOpen()) {
-        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4">
-          <div class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 animate-in slide-in-from-bottom duration-200">
-            
-            <div class="flex justify-between items-center border-b pb-3">
-              <h3 class="text-base font-bold text-slate-900">Add New Bill</h3>
-              <button (click)="isModalOpen.set(false)" class="text-slate-400 hover:text-slate-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-              </button>
-            </div>
-
-            <form [formGroup]="billForm" (ngSubmit)="saveBill()" class="space-y-3.5">
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Bill Name</label>
-                <input 
-                  type="text" 
-                  formControlName="billName" 
-                  name="title" 
-                  placeholder="e.g. Meralco Electric" 
-                  required 
-                  (input)="capitalizeFirstLetter('billName')"
-                  class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600"
-                />
-              </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (₱)</label>
-                  <input 
-                    type="number" 
-                    formControlName="amount" 
-                    name="amount" 
-                    placeholder="0.00" 
-                    required 
-                    class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600"
+              <!-- Status Toggle / Badge -->
+              <button
+                (click)="toggleStatus(bill.id)"
+                [class]="
+                  'my-2 inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium border shadow-sm transition-all duration-150 active:scale-95 cursor-pointer ' +
+                  getStatusBadgeClass(bill.status)
+                "
+              >
+                <!-- Checkmark icon shown when Paid -->
+                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M5 13l4 4L19 7"
                   />
-                </div>
+                </svg>
 
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
-                  <select 
-                    formControlName="category" 
-                    name="category" 
-                    class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600 bg-white">
-                    <option value="Housing">Housing</option>
-                    <option value="Utilities">Utilities</option>
-                    <option value="Transportation">Transportation</option>
-                    <option value="Others">Others</option>
-                  </select>
-                </div>
-                
-                <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Due Date</label>
-                <input 
-                  type="date" 
-                  formControlName="dueDate" 
-                  name="dueDate" 
-                  required 
-                  class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600"
-                />
-              </div>
-              <button 
-                type="submit" 
-                class="w-full min-h-[48px] bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white font-semibold py-3 px-4 rounded-xl mt-2 transition-all duration-150 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 touch-manipulation">
-                Save Bill
+                <span>{{ bill.status === 'Pending' ? 'Mark as Paid' : 'Paid' }}</span>
               </button>
             </div>
-            </form>
+
+            <button (click)="deleteBill(bill.id)" class="text-slate-300 hover:text-rose-500 p-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
           </div>
+        </div>
+      } @empty {
+        <div class="text-center py-12 bg-white rounded-2xl border border-slate-100">
+          <p class="text-sm text-slate-400 font-medium">No bills found for this month.</p>
         </div>
       }
+    </div>
+  </main>
+
+  <!-- Add Bill Modal Sheet -->
+  @if (isModalOpen()) {
+    <div
+      class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-0 sm:p-4"
+    >
+      <div
+        class="bg-white w-full max-w-md rounded-2xl p-6 space-y-4 animate-in slide-in-from-bottom duration-200"
+      >
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="text-base font-bold text-slate-900">Add New Bill</h3>
+          <button (click)="isModalOpen.set(false)" class="text-slate-400 hover:text-slate-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <form [formGroup]="billForm" (ngSubmit)="saveBill()" class="space-y-3.5">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Bill Name</label>
+            <input
+              type="text"
+              formControlName="billName"
+              name="title"
+              placeholder="e.g. Meralco Electric"
+              required
+              (input)="capitalizeFirstLetter('billName')"
+              class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600"
+            />
+            @if (billForm.get('billName')?.invalid && billForm.get('billName')?.touched) {
+              <p class="text-xs text-red-500 mt-1">Bill Name is required.</p>
+            }
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (₱)</label>
+              <input
+                type="number"
+                formControlName="amount"
+                name="amount"
+                placeholder="0.00"
+                required
+                class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600"
+              />
+              @if (billForm.get('amount')?.invalid && billForm.get('amount')?.touched) {
+                <p class="text-xs text-red-500 mt-1">Amount is required.</p>
+              }
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+              <select
+                formControlName="category"
+                name="category"
+                class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600 bg-white"
+              >
+                <option value="Housing">Housing</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Others">Others</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Due Date</label>
+              <input
+                type="date"
+                formControlName="dueDate"
+                name="dueDate"
+                required
+                class="w-full text-sm p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-violet-600"
+              />
+
+              @if (billForm.get('dueDate')?.invalid && billForm.get('dueDate')?.touched) {
+                <p class="text-xs text-red-500 mt-1">Due Date is required.</p>
+              }
+            </div>
+            <button
+              type="submit"
+              class="w-full min-h-[48px] bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white font-semibold py-3 px-4 rounded-xl mt-2 transition-all duration-150 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 touch-manipulation"
+            >
+              Save Bill
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
 </div>
